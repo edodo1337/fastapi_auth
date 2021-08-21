@@ -3,7 +3,8 @@ from __future__ import annotations
 from fastapi import APIRouter
 from starlette.responses import JSONResponse
 
-from app.services.auth import AuthFacade
+from app.models import UserIn
+from app.services.auth import AuthException, AuthService
 
 auth_router = APIRouter()
 
@@ -14,8 +15,11 @@ def signup() -> JSONResponse:
 
 
 @auth_router.post('/login')
-def login(username: str) -> JSONResponse:
-    return AuthFacade().encode_token(username=username)
+def login(user_in: UserIn) -> JSONResponse:
+    try:
+        return AuthService().authenticate(user_in=user_in)
+    except AuthException:
+        return JSONResponse({'message': 'Login or password is not correct'})
 
 
 @auth_router.get('/refresh_token')

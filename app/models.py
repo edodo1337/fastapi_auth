@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
+from typing import Optional
 
 from pydantic import BaseModel
-from pydantic.types import OptionalInt
 
 from app.settings import ACCESS_TOKEN_EXPIRE_MINUTES
 
@@ -11,7 +11,17 @@ from app.settings import ACCESS_TOKEN_EXPIRE_MINUTES
 class User(BaseModel):
     pk: int
     username: str
-    full_name: OptionalInt
+    full_name: Optional[str]
+    is_active: bool
+    created_at: datetime
+    salt: str
+    hashed_password: str
+
+
+class UserOut(BaseModel):
+    pk: int
+    username: str
+    full_name: Optional[str]
     is_active: bool
     created_at: datetime
 
@@ -19,6 +29,11 @@ class User(BaseModel):
 class UserIn(BaseModel):
     username: str
     password: str
+
+
+class UserPassword(BaseModel):
+    hashed_password: str
+    salt: str
 
 
 class JWTMeta(BaseModel):
