@@ -1,15 +1,22 @@
 from __future__ import annotations
 
-import fastapi
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.settings import get_settings
+from app.v1.api import api_router
 
 
-@app.get('/')
-async def root() -> fastapi.Response:
-    return {'message': 'Hello'}
+def get_application() -> FastAPI:
+    """Base app configuration."""
+    settings = get_settings()
+    application = FastAPI(
+        title=settings.project_name,
+        debug=settings.debug,
+        version=settings.app_version,
+        docs_url=settings.docs_url,
+    )
+    application.include_router(api_router, prefix='/v1')
+    return application
 
 
-def test(response: int) -> int:
-    return response + 1
+APP = get_application()
