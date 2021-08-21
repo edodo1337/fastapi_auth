@@ -6,8 +6,9 @@ services:
         - POSTGRES_DB
         - POSTGRES_USER
         - POSTGRES_PASSWORD
+        - POSTGRES_PORT
         ports:
-        - '${POSTGRES_MASTER_PORT}:5432'
+        - '${POSTGRES_PORT}:5432'
         volumes:
         - ./postgresqldumps:/code/dumps
         - ./postgresql/data:/var/lib/postgresql/data

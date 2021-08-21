@@ -23,4 +23,7 @@ install-hooks:
 	pre-commit install -t pre-commit -t commit-msg -t pre-push
 
 migrations:
-#	@python3 manage.py makemigrations
+	cd app && alembic revision --autogenerate -m "$(name)"
+
+migrate:
+	cd app && alembic upgrade head

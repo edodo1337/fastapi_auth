@@ -6,8 +6,8 @@ from fastapi import HTTPException
 from passlib.context import CryptContext
 
 from app import settings
-from app.models import JWTPayload, UserIn, UserPassword
 from app.repositories.user import UserRepository, get_user_repository
+from app.schemes import JWTPayload, Token, UserIn, UserPassword
 
 
 class AuthException(BaseException):
@@ -51,7 +51,7 @@ class AuthService:
 
     def authenticate(
         self, user_in: UserIn, users_repo: UserRepository = get_user_repository()
-    ) -> str:
+    ) -> Token:
         user = users_repo.get_by_username(username=user_in.username)
         if not user:
             raise AuthException
@@ -59,4 +59,5 @@ class AuthService:
         if not self.verify_password(user_in.password, user.salt, user.hashed_password):
             raise AuthException
 
-        return self.encode_token(user)
+        token = Token(access_token=self.encode_token(user), token_type='bearer')
+        return token

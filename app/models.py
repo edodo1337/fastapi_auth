@@ -1,51 +1,18 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta
-from typing import Optional
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.sql.sqltypes import TIMESTAMP, VARCHAR, Boolean, SmallInteger
 
-from pydantic import BaseModel
-
-from app.settings import ACCESS_TOKEN_EXPIRE_MINUTES
-
-
-class User(BaseModel):
-    pk: int
-    username: str
-    full_name: Optional[str]
-    is_active: bool
-    created_at: datetime
-    salt: str
-    hashed_password: str
+Base = declarative_base()
 
 
-class UserOut(BaseModel):
-    pk: int
-    username: str
-    full_name: Optional[str]
-    is_active: bool
-    created_at: datetime
-
-
-class UserIn(BaseModel):
-    username: str
-    password: str
-
-
-class UserPassword(BaseModel):
-    hashed_password: str
-    salt: str
-
-
-class JWTMeta(BaseModel):
-    iat: datetime = datetime.utcnow()
-    exp: datetime = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    sub: str
-    scope: str = 'access_token'
-
-
-class JWTCredentials(BaseModel):
-    pass
-
-
-class JWTPayload(JWTMeta, JWTCredentials):
-    pass
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(SmallInteger)
+    full_name = Column(String)
+    created_at = Column(TIMESTAMP(timezone=True))
+    is_active = Column(Boolean)
+    salt = Column(VARCHAR(length=255))
+    hashed_password = Column(VARCHAR(length=255))

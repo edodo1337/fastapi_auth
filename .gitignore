@@ -92,6 +92,7 @@ local_settings.py
 
 # SQLite
 *.db
+postgresql/
 
 # Flask instance folder
 instance/

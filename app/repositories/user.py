@@ -3,8 +3,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Optional
 
-from app.models import User, UserOut
 from app.repositories.base import BaseRepository
+from app.schemes import User, UserOut
 
 users_mock = {
     1: User(
