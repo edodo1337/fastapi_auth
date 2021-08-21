@@ -1,0 +1,13 @@
+version: '3.6'
+services:
+    postgres:
+        image: postgres:13-alpine
+        environment:
+        - POSTGRES_DB
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+        ports:
+        - '${POSTGRES_MASTER_PORT}:5432'
+        volumes:
+        - ./postgresqldumps:/code/dumps
+        - ./postgresql/data:/var/lib/postgresql/data
