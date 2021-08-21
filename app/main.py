@@ -8,3 +8,7 @@ app = FastAPI()
 @app.get('/')
 async def root():
     return {'message': 'Hello'}
+
+
+def test(response):
+    return response + 1
