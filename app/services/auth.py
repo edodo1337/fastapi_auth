@@ -50,9 +50,9 @@ class AuthService:
             raise HTTPException(status_code=401, detail='Invalid token')
 
     def authenticate(
-        self, user_in: UserIn, users_repo: UserRepository = get_user_repository()
+        self, user_in: UserIn, user_repo: UserRepository = get_user_repository()
     ) -> Token:
-        user = users_repo.get_by_username(username=user_in.username)
+        user = user_repo.get_by_username(username=user_in.username)
         if not user:
             raise AuthException
 

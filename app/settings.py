@@ -20,7 +20,7 @@ POSTGRES_PORT = os.getenv('POSTGRES_PORT')
 DEBUG = os.getenv('DEBUG')
 
 DATABASE_URL = (
-    f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@'
+    f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@'
     f'{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
 )
 

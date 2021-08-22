@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.sql.sqltypes import TIMESTAMP, VARCHAR, Boolean, SmallInteger
+from sqlalchemy.sql.sqltypes import TIMESTAMP, VARCHAR, Boolean
 
-Base = declarative_base()
+from app.core.database import Base
 
 
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(SmallInteger)
+    username = Column(VARCHAR(length=255))
     full_name = Column(String)
     created_at = Column(TIMESTAMP(timezone=True))
     is_active = Column(Boolean)

@@ -10,12 +10,12 @@ auth_router = APIRouter()
 
 
 @auth_router.post('/signup')
-def signup() -> JSONResponse:
+async def signup() -> JSONResponse:
     return 'Sign up endpoint'
 
 
 @auth_router.post('/login')
-def login(user_in: UserIn) -> Token:
+async def login(user_in: UserIn) -> Token:
     try:
         return AuthService().authenticate(user_in=user_in)
     except AuthException:
@@ -23,15 +23,20 @@ def login(user_in: UserIn) -> Token:
 
 
 @auth_router.get('/refresh_token')
-def refresh_token(token: str) -> JSONResponse:
-    return 'Refresh token'
+async def refresh_token(token: str) -> JSONResponse:
+    from app.core.database import database
+
+    query = 'SELECT * FROM users;'
+    rows = await database.fetch_all(query=query)
+    return rows
+    # return 'Refresh token'
 
 
 @auth_router.post('/secret')
-def secret_data() -> JSONResponse:
+async def secret_data() -> JSONResponse:
     return 'Secret data'
 
 
 @auth_router.get('/notsecret')
-def not_secret_data() -> JSONResponse:
+async def not_secret_data() -> JSONResponse:
     return 'Not secret data'
