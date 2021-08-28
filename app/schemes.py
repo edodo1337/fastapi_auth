@@ -9,13 +9,24 @@ from app.settings import ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 class User(BaseModel):
-    pk: int
+    id: int
     username: str
-    full_name: Optional[str]
     is_active: bool
     created_at: datetime
     salt: str
     hashed_password: str
+
+
+class UserCreate(BaseModel):
+    username: str
+    is_active: bool
+    salt: str
+    hashed_password: str
+
+
+class UserCreateRequest(BaseModel):
+    username: str
+    password: str
 
 
 class UserOut(BaseModel):

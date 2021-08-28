@@ -3,8 +3,13 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
+from databases.core import Database
+
 
 class BaseRepository(ABC):
+    def __init__(self, db: Database):
+        self.db = db
+
     @abstractmethod
     def delete(self, pk: int) -> None:
         pass

@@ -6,8 +6,8 @@ from fastapi import HTTPException
 from passlib.context import CryptContext
 
 from app import settings
-from app.repositories.user import UserRepository, get_user_repository
 from app.schemes import JWTPayload, Token, UserIn, UserPassword
+from app.repositories.users import UsersRepository
 
 
 class AuthException(BaseException):
@@ -49,10 +49,8 @@ class AuthService:
         except jwt.InvalidTokenError:
             raise HTTPException(status_code=401, detail='Invalid token')
 
-    def authenticate(
-        self, user_in: UserIn, user_repo: UserRepository = get_user_repository()
-    ) -> Token:
-        user = user_repo.get_by_username(username=user_in.username)
+    async def authenticate(self, user_in: UserIn, user_repo: UsersRepository) -> Token:
+        user = await user_repo.get_by_username(username=user_in.username)
         if not user:
             raise AuthException
 

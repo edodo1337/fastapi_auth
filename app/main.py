@@ -1,6 +1,8 @@
 from __future__ import annotations
+from app.core.utils import create_start_app_handler, create_stop_app_handler
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.database import database
 from app.settings import get_settings
@@ -18,13 +20,16 @@ def get_application() -> FastAPI:
     )
     application.include_router(api_router, prefix='/v1')
 
-    @application.on_event('startup')
-    async def startup() -> None:
-        await database.connect()
+    application.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
-    @application.on_event('shutdown')
-    async def shutdown() -> None:
-        await database.disconnect()
+    application.add_event_handler("startup", create_start_app_handler(application))
+    application.add_event_handler("shutdown", create_stop_app_handler(application))
 
     return application
 
